@@ -8,36 +8,35 @@
     <title>Chatbot</title>
     <style>
         body {
-            color: #333;
-            background-color: #efefef;
-            font: 13px helvetica,arial,freesans,clean,sans-serif;
+            color: #000000;
+            background-color: #e2cece;
+            font: 15px helvetica,arial,sans-serif;
         }
         #demo {
-            /*background-color: #ffffff;*/
             width: 80%;
             max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
-            padding: 20px;
+            padding: 30px;
 
-            background-color: #F8F8F8;
-            border: 1px solid #ccc;
-            box-shadow: 0 0 10px #999;
+            background-color: #ffffff;
+            border: 5px solid #000000;
+            box-shadow: 10 10 10px #000000;
             line-height: 1.4em;
-            font: 13px helvetica,arial,freesans,clean,sans-serif;
+            font: 15px helvetica,arial,sans-serif;
             color: black;
         }
         #demo input {
-            padding: 8px;
-            font-size: 14px;
-            border: 1px solid #ddd;
-            width: 400px;
+            padding: 10px;
+            font-size: 15px;
+            border: 2.5px solid #000000;
+            width: 500px;
         }
         .button {
             display: inline-block;
-            background-color: darkcyan;
-            color: #fff;
-            padding: 8px;
+            background-color: indianred;
+            color: #00000;
+            padding: 10px;
             cursor: pointer;
             float: right;
         }
@@ -54,22 +53,18 @@
     </style>
 </head>
 <body>
-
 <script src="../js/chatbot.js"></script>
 <link rel="stylesheet" type="text/css" href="../css/chatbot.css" />
-
-<br>
 <div class="jumbotron text-center">
   <h1>ChatBot</h1>
   <h3>Welcome to Chatbot powered by DuckDuckGo</h3>
 </div>
 
-
 <div id="demo">
     <div id="chatBotCommandDescription"></div>
     <input id="humanInput" type="text" placeholder="Say something" />
 
-    <div class="button" onclick="if (!ChatBot.playConversation(sampleConversation,4000)) {alert('conversation already running');};">Play sample conversation!</div>
+    <div class="button" onclick="if (!ChatBot.playConversation(sampleConversation,4000)) {alert('Hey, the conversation is already running!');};">Play sample conversation</div>
     <div class="button" onclick="$('#chatBotCommandDescription').slideToggle();" style="margin-right:10px">What can I say?</div>
 
     <div style="clear: both;">&nbsp;</div>
@@ -79,31 +74,26 @@
         <div id="chatBotHistory"></div>
     </div>
 </div>
-
-<br>
-<br>
 <br>
 <div class="container">
   <div class="row">
     <div class="col-sm-4">
-      <h3>Column 1</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+      <h3>Real time</h3>
+      <p>//Add description</p>
+      <p>//Add description firse</p>
     </div>
     <div class="col-sm-4">
-      <h3>Column 2</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+      <h3>//Add title2</h3>
+      <p>//Add description</p>
+      <p>//Add description</p>
     </div>
     <div class="col-sm-4">
-      <h3>Column 3</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+      <h3>//Add title3</h3>
+      <p>//Add description</p>
+      <p>//Add description</p>
     </div>
   </div>
 </div>
-
-
 <script>
     var sampleConversation = [
         "Hi",
