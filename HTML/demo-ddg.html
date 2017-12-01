@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <title>Chatbot</title>
@@ -91,7 +91,7 @@
     </div>
     <div class="col-sm-4">
       <h3>Smart replies</h3>
-      <p>Get smart auto replies from DuckDuckGo as you hit <kbd>Enter</kbd> after your query.</p>
+      <p>Get smart replies from DuckDuckGo as you hit <kbd>Enter</kbd> after your query.</p>
       <p>Confused about what to ask? Hit the <i>What can I say</i> or <i>Play sample conversation</i> buttons to start.</p>
     </div>
   </div>
@@ -99,11 +99,11 @@
 <script>
     var sampleConversation = [
         "Hi",
-        "My name is Fry",
-        "Where is China?",
-        "What is the population of China?",
-        "Bye"
-    ];
+        "My name is Vaibhav",
+        "Where is Barbados?",
+        "What is the population of Barbados?", //China
+        "Goodbye!" //Bye
+        ];
     var config = {
         botName: 'Duck Duck Go Bot',
         inputs: '#humanInput',
@@ -115,7 +115,7 @@
     };
     ChatBot.init(config);
     ChatBot.setBotName("Duck Duck Go Bot");
-    ChatBot.addPattern("^hi$", "response", "Howdy, friend", undefined, "Say 'Hi' to be greeted back.");
+    ChatBot.addPattern("^hi$", "response", "Howdy, friend!", undefined, "Say 'Hi' to greeted back.");
     ChatBot.addPattern("^bye$", "response", "See you later buddy", undefined, "Say 'Bye' to end the conversation.");
     ChatBot.addPattern("(?:my name is|I'm|I am) (.*)", "response", "hi $1, thanks for talking to me today", function (matches) {
         ChatBot.setHumanName(matches[1]);
