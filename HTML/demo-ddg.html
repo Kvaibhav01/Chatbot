@@ -67,8 +67,6 @@
     <div class="button" onclick="if (!ChatBot.playConversation(sampleConversation,4000)) {alert('Hey, the conversation is already running!');};">Play sample conversation</div>
     <div class="button" onclick="$('#chatBotCommandDescription').slideToggle();" style="margin-right:10px">What can I say?</div>
 
-    <div style="clear: both;">&nbsp;</div>
-
     <div id="chatBot">
         <div id="chatBotThinkingIndicator"></div>
         <div id="chatBotHistory"></div>
@@ -78,19 +76,19 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-4">
-      <h3>Real time</h3>
+      <h3>⏲️ Real time</h3>
       <p>Get replies to your queries instantly. No more wait!</p>
       <p>Start chatting with the bot by typinng in the box above and <span class="glyphicon glyphicon-eye-open"></span> how it responds back.
       Its time to start a conversation with a bot!</p>
       <p></p>
     </div>
     <div class="col-sm-4">
-      <h3>Free to use</h3>
+      <h3>🚩 Free to use</h3>
       <p>This project was prossible due to the <a href="https://duckduckgo.com/api" target="_blank">API provided by DuckDuckGo</a>.
       It is open-sourced for every developer. Feel free to <span class="glyphicon glyphicon-star"></span> or fork the project on <a href="https://github.com/Kvaibhav01/Chatbot" target="_blank">GitHub</a>.</p>
     </div>
     <div class="col-sm-4">
-      <h3>Smart replies</h3>
+      <h3>🤓 Smart replies</h3>
       <p>Get smart replies from DuckDuckGo as you hit <kbd>Enter</kbd> after your query.</p>
       <p>Confused about what to ask? Hit the <i>What can I say</i> or <i>Play sample conversation</i> buttons to start.</p>
     </div>
@@ -104,26 +102,37 @@
         "What is the population of Barbados?", //China
         "Goodbye!" //Bye
         ];
+
+    //Initialize the bot
     var config = {
-        botName: 'Duck Duck Go Bot',
+        botName: 'Duck Duck Go Bot', //What inputs should it use?
         inputs: '#humanInput',
-        inputCapabilityListing: true,
-        engines: [ChatBot.Engines.duckduckgo()],
-        addChatEntryCallback: function(entryDiv, text, origin) {
-            entryDiv.delay(200).slideDown();
+        inputCapabilityListing: true, //To show the list of inputs of the bot in textbox
+        engines: [ChatBot.Engines.duckduckgo()], //Use the DuckDuckGo search engine
+        addChatEntryCallback: function(entryDiv, text, origin) { //What hapens to a newly added message
+            entryDiv.delay(10).slideDown(); //Time and animation for the reply
         }
     };
     ChatBot.init(config);
     ChatBot.setBotName("Duck Duck Go Bot");
-    ChatBot.addPattern("^hi$", "response", "Howdy, friend!", undefined, "Say 'Hi' to greeted back.");
+
+    /*Specific patterns as shown while clicking 'What can I say?' button.
+    Parameter: the pattern to listen, respond/rewrite request, response/rewrite value, function to match pattern, Value of what a user can say */
+    ChatBot.addPattern("^hi$", "response", "Howdy, friend!", undefined, "Say 'Hi' to greet back.");
     ChatBot.addPattern("^bye$", "response", "See you later buddy", undefined, "Say 'Bye' to end the conversation.");
     ChatBot.addPattern("(?:my name is|I'm|I am) (.*)", "response", "hi $1, thanks for talking to me today", function (matches) {
         ChatBot.setHumanName(matches[1]);
-    },"Say 'My name is [your name]' or 'I am [name]' to be called that by the bot");
-    ChatBot.addPattern("(what is the )?meaning of life", "response", "42", undefined, "Say 'What is the meaning of life' to get the answer.");
+    },"Say 'My name is [your name]' or 'I am [name]' so that the bot knows your name.");
+    ChatBot.addPattern("(what is the )?meaning of life", "response", "Scientifically, it's the condition that distinguishes animals and plants from inorganic matter.", undefined, "Say 'What is the meaning of life' to get the answer.");
+
+    /*Chatbot's basic arithemetic abilities*/
     ChatBot.addPattern("compute ([0-9]+) plus ([0-9]+)", "response", undefined, function (matches) {
-        ChatBot.addChatEntry("That would be "+(1*matches[1]+1*matches[2])+".","bot");
-    },"Say 'compute [number] plus [number]' to make the bot your math monkey");
+        ChatBot.addChatEntry("That would be "+(1*matches[1]+1*matches[2])+". I'm also cool at subtraction. Check it out! 😎","bot");
+    },"Say 'compute [number] plus [number]' to add two numbers in a breeze.");
+    ChatBot.addPattern("compute ([0-9]+) minus ([0-9]+)", "response", undefined, function (matches) {
+        ChatBot.addChatEntry("I subtracted that. It's "+(1*matches[1]-1*matches[2])+". Now don't try to multiply or divide. I hate them.😠","bot");
+    },"Say 'compute [number] minus [number]' to subtract two numbers in half a second.");
+
 
 </script>
 </body>

@@ -1,15 +1,17 @@
 .chatBotChatEntry {
-    padding: 20px;
+    padding: 10px;
     background-color: #fff;
-    border: none;
-    margin-top: 5px;
-    font-family: 'open_sanslight', sans-serif !important;
+    border-style: outset;
+    border-width: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 17px;
     font-weight: normal;
 }
 
 .chatBotChatEntry * {
-    font-family: 'open_sanslight', sans-serif !important;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 17px;
     font-weight: normal;
 }
@@ -20,7 +22,7 @@
 }
 .chatBotChatEntry .imgBox {
     position: relative;
-    width: 32%;
+    width: 20s%;
     display: inline-block;
     margin-top: 10px;
     margin-right: 10px;
@@ -60,12 +62,12 @@
 }
 
 .bot {
-    /*border: 4px solid rgba(0, 132, 60, 0.2);*/
-    background-color: rgba(0, 132, 60, 0.2);
+    border: 4px solid rgba(0, 0, 0, 0.2);
+    background-color: #c1bd99;
 }
 .human {
-    /*border: 4px solid rgba(38, 159, 202, 0.2);*/
-    background-color: rgba(38, 159, 202, 0.2);
+    border: 4px solid rgba(0, 0, 0, 0.2);
+    background-color: #99c1b9;
 }
 
 #chatBotCommandDescription {
@@ -74,19 +76,19 @@
     padding: 20px;
 }
 .commandDescription span.phraseHighlight {
-    color: chartreuse;
+    color: #82c6e5;
 }
 .commandDescription span.placeholderHighlight {
-    color: deeppink;
+    color: #c882e5;
 }
 .commandDescription {
     margin-top: 5px;
 }
 
 #chatBotConversationLoadingBar {
-    background-color: darkcyan;
-    height: 2px;
-    width: 0;
+    background-color: #000000;
+    height: 2.5px;
+    width: 0px;
 }
 
 .appear {
