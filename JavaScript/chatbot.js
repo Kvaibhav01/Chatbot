@@ -1,7 +1,6 @@
 var ChatBot = function () {
 
-    //// common vars
-    // custom patterns and rewrites
+    // common patterns used
     var patterns;
 
     // the bot's name
@@ -10,19 +9,19 @@ var ChatBot = function () {
     // the human's name
     var humanName;
 
-    // the html (text / image etc.) that is displayed when the bot is busy
+    // the html (text / image) that is displayed when the bot is busy
     var thinkingHtml;
 
     // a selector to all inputs the human can type to
     var inputs;
 
-    // whether to list the capabilities below the input field
+    // whether to list the capabilities below the input field or not
     var inputCapabilityListing;
 
-    // the example phrases that can be said (to be listed under the input field)
+    // the example phrases array that can be said (listed under the input field)
     var examplePhrases = [];
 
-    // the engines to use for answering queries that are not caught by simple patterns
+    // the engines to use for answering queries. DuckDuckGo engine is used
     var engines;
 
     // whether a sample conversation is running
@@ -35,7 +34,7 @@ var ChatBot = function () {
     function updateCommandDescription() {
         var description = '';
 
-        // first explain manually defined commands and then all by all used engines
+        // first explain manually defined commands and then all
         var descriptions = [];
 
         var i, j;
@@ -45,7 +44,7 @@ var ChatBot = function () {
             }
         }
         for (i = 0; i < engines.length; i++) {
-            var caps = engines[i].getCapabilities();
+            var caps = engines[i].getCapabilities(); //getCapablities() is a built in function
             for (j = 0; j < caps.length; j++) {
                 descriptions.push(caps[j]);
             }
@@ -65,9 +64,10 @@ var ChatBot = function () {
                     examplePhrases.push(cleanMatch.replace(/['"]/gi,''));
                 }
             }
-            description += '<div class="commandDescription">' + pdesc + '</div>';
+            description = description + '<div class="commandDescription">' + pdesc + '</div>';
         }
-
+        
+        // To execute command list using jQuery
         var datalist = $('#chatBotCommands');
         if (datalist.size() == 0) {
             datalist = $('<datalist id="chatBotCommands">');
@@ -85,24 +85,24 @@ var ChatBot = function () {
         $('#chatBotCommandDescription').html(description);
     }
 
-    // type writer
+    //Typewriter in the text box
     function playConversation(state, pauseLength) {
 
         setTimeout(function() {
             var newValue = '';
             if ($(inputs).val() != '|') {
-                newValue += $(inputs).val();
+                newValue = newValue + $(inputs).val();
             }
-            newValue += state.currentInput.slice(state.start,state.start+1);
+            newValue = newValue + state.currentInput.slice(state.start,state.start+1);
             $(inputs).val(newValue);
             state.start++;
 
             if (state.start < state.currentInput.length) {
-                // keep typing
+                //Then keep typing
                 playConversation(state, pauseLength);
             } else {
 
-                // press enter and wait for some time and then write the next entry
+                //Press enter and wait for some time and then write the next entry
                 ChatBot.addChatEntry(state.currentInput, "human");
                 ChatBot.react(state.currentInput);
                 $(inputs).val(state.currentInput);
@@ -111,7 +111,7 @@ var ChatBot = function () {
                     state.conversationArrayIndex++;
                     state.conversationArrayIndex = state.conversationArrayIndex % state.conversationArray.length;
 
-                    // did we cycle through the conversation array? if so, stop
+                    //Did we cycle through the conversation array? if so, stop
                     if (state.conversationArrayIndex == 0) {
                         $('#chatBotConversationLoadingBar').remove();
                         sampleConversationRunning = false;
@@ -123,7 +123,8 @@ var ChatBot = function () {
                     state.currentInput = state.conversationArray[state.conversationArrayIndex];
                     playConversation(state, pauseLength);
                 }, pauseLength);
-
+                
+                //Conversation loading bar 
                 var chclb = $('#chatBotConversationLoadingBar');
                 if (chclb.size() == 0) {
                     chclb = $('<div id="chatBotConversationLoadingBar"></div>');
@@ -143,142 +144,27 @@ var ChatBot = function () {
                 });
 
             }
-        }, Math.random()*120+10);
+        }, Math.random()*120+20); //setTimeout() ends. random() sets the speed of typing.
     }
 
     return {
-        Engines: {
-            // the webknox API: http://webknox.com/api
-            webknox: function (apiKey) {
-
-                // patterns that the engine can resolve
-                var capabilities = [
-                    "Ask for stock prices like 'stock price apple' or '[company] stock'.",
-                    "Ask for distances as in 'how far is Perth from Melbourne' or 'distance between [place1] and [place2]'.",
-                    "Want to know what the weather is like, just ask like 'weather in San Diego, California'.",
-                    "Let WebKnox tell you a joke, just say 'tell me a joke'.",
-                    "Convert units, e.g. '2.4 miles in kilometers' or '4 tablespoons to ml?'.",
-                    "Get synonyms for a word, e.g. 'synonyms for car'.",
-                    "Ask for quotes like 'quotes about [topic]' or 'quotes about love'.",
-                    "Ask for quotes from a person 'quotes by [person]' or 'quotes by aristotle'.",
-                    "Ask for recipes like 'spaghetti recipes' or 'chocolate donuts'.",
-                    "Ask for nutrient contents like 'vitamin a in 2 carrots' or 'calories is 1 cup of butter'.",
-                    "Convert ingredients like '2 cups of butter in grams'.",
-                    "If you want more results, just say 'more'.",
-                    "For more similar results say 'more like the first/second/third...'.",
-                    "Or just ask anything that comes to mind like 'Who was pope in 1499?' or 'Who directed braveheart?'.",
-                ];
-
-                // the context id for the current conversation
-                var contextId = Math.random() * 100000;
-
-                return {
-                    react: function (query) {
-                        $.get('https://webknox-question-answering.p.mashape.com/questions/converse?mashape-key=' + apiKey + '&contextId=' + contextId + '&text=' + encodeURIComponent(query), function (data) {
-
-                            var content = data.answerText;
-
-                            if (data.media != undefined) {
-
-                                content += '<br>';
-
-                                for (var i = 0; i < data.media.length; i++) {
-                                    var ob = data.media[i];
-                                    content += '<div class="imgBox">' +
-                                        '<img src="' + ob.image + '" />' +
-                                        '<div class="title">' + ob.title + '</div>' +
-                                        '<div class="actions">' +
-                                        '<div class="button blue" onclick="document.location.href=\'' + ob.link + '\'">Details</div>' +
-                                        '<br>' +
-                                        '<div class="button blue" onclick=" ChatBot.addChatEntry(\'more like number ' + (i + 1) + '\',\'human\');ChatBot.react(\'more like ' + (i + 1) + '\');">More like this</div>' +
-                                        '</div>' +
-                                        '</div>';
-                                }
-
-                            }
-
-                            ChatBot.addChatEntry(content, "bot");
-                            ChatBot.thinking(false);
-                        });
-                    },
-                    getCapabilities: function () {
-                        return capabilities;
-                    },
-                    getSuggestUrl: function() {
-                        return 'https://webknox-question-answering.p.mashape.com/questions/converse/suggest?mashape-key=' + apiKey + '&query=';
-                    }
-                }
-            },
-
-            // the spoonacular API: http://spoonacular.com/food-api
-            spoonacular: function (apiKey) {
-
-                // patterns that the engine can resolve
-                var capabilities = [
-                    "Ask for recipes like 'chicken recipes' or 'spaghetti with shrimp'",
-                    "Ask for nutrient contents like 'vitamin a in 2 carrots' or 'calories is 1 cup of butter'",
-                    "Convert something with '2 cups of butter in grams'",
-                    "If you want more results, just say 'more'",
-                    "For more similar results say 'more like the first/second/third...'",
-                    "Let spoonacular tell you a joke, just say 'tell me a joke'.",
-                    "Want to learn some food trivia, just say 'food trivia'.",
-                ];
-
-                // the context id for the current conversation
-                var contextId = Math.random() * 100000;
-
-                return {
-                    react: function (query) {
-                        $.get('https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/converse?mashape-key=' + apiKey + '&contextId=' + contextId + '&text=' + encodeURIComponent(query), function (data) {
-
-                            var content = data.answerText;
-
-                            if (data.media != undefined) {
-
-                                content += '<br>';
-
-                                for (var i = 0; i < data.media.length; i++) {
-                                    var ob = data.media[i];
-                                    content += '<div class="imgBox">' +
-                                        '<img src="' + ob.image + '" />' +
-                                        '<div class="title">' + ob.title + '</div>' +
-                                        '<div class="actions">' +
-                                        '<div class="button blue" onclick="document.location.href=\'' + ob.link + '\'">Details</div>' +
-                                        '<br>' +
-                                        '<div class="button blue" onclick=" ChatBot.addChatEntry(\'more like number ' + (i + 1) + '\',\'human\');ChatBot.react(\'more like ' + (i + 1) + '\');">More like this</div>' +
-                                        '</div>' +
-                                        '</div>';
-                                }
-
-                            }
-
-                            ChatBot.addChatEntry(content, "bot");
-                            ChatBot.thinking(false);
-                        });
-                    },
-                    getCapabilities: function () {
-                        return capabilities;
-                    },
-                    getSuggestUrl: function() {
-                        return 'https://spoonacular-recipe-food-nutrition-v1.p.mashape.com/food/converse/suggest?mashape-key=' + apiKey + '&query=';
-                    }
-                }
-            },
+        Engines: { //Initialize the DuckDuckGo engine 
 
             duckduckgo: function () {
 
-                // patterns that the engine can resolve
+                //Patterns that the engine can resolve
                 var capabilities = [
                     "Ask what something is like 'What is DNA'?",
-                    "Ask where something is like 'Where is China'?",
-                    "Ask about a person like 'Who is Bill Gates'?",
-                    "Say a movie/person/location name like 'Braveheart' to get information about that entity",
+                    "Ask where something is like 'Where is Barbados'?",
+                    "Ask about a person like 'Who is Elon Musk'?",
+                    "Say a movie/person/location name like 'Avengers Infinity War' to get information about it",
                     "Say a something like 'simpsons characters' to get information about that phrase",
                 ];
-
+                
+                // Fetch data
                 return {
-                    react: function (query) {
-                        $.ajax({
+                    react: function (query) { //Using JSON
+                        $.ajax({ //Perform async HTTP request
                             type: 'GET',
                             url: 'http://api.duckduckgo.com/?format=json&pretty=1&q=' + encodeURIComponent(query),
                             dataType: 'jsonp'
@@ -286,10 +172,10 @@ var ChatBot = function () {
 
                             var content = data.AbstractText;
 
-                            // no direct answer? tell about related topics then
+                            //If no direct answer is found then tell about related topics
                             if (content == '' && data.RelatedTopics.length > 0) {
 
-                                content = '<p>I found multiple answers for you:</p>';
+                                content = '<p>Umm... 😕 I found multiple answers for you:</p>';
 
                                 var media = [];
                                 for (var i = 0; i < data.RelatedTopics.length; i++) {
@@ -301,10 +187,10 @@ var ChatBot = function () {
                                         media.push(ob.Icon.URL);
                                     }
 
-                                    content += '<p>' + ob.Result.replace("</a>", "</a> ") + '</p>';
+                                    content = content + '<p>' + ob.Result.replace("</a>", "</a> ") + '</p>';
                                 }
 
-                                ///content += '<img src="' + ob.Icon.URL + '" align="left" />' +
+                                // content += '<img src="' + ob.Icon.URL + '" align="left" />' +
 
                                 for (i = 0; i < media.length; i++) {
                                     var m = media[i];
@@ -315,9 +201,9 @@ var ChatBot = function () {
 
                                 if (data.Image != undefined && data.Image != '') {
 
-                                    content += '<br>';
+                                    content = content + '<br>';
 
-                                    content += '<div class="imgBox">' +
+                                    content = content + '<div class="imgBox">' +
                                         '<img src="' + data.Image + '" />' +
                                         '<div class="title">' + data.Heading + '</div>' +
                                         '</div>';
@@ -328,7 +214,7 @@ var ChatBot = function () {
 
                             ChatBot.addChatEntry(content, "bot");
                             ChatBot.thinking(false);
-                        });
+                        })  ;
                     },
                     getCapabilities: function () {
                         return capabilities;
@@ -363,15 +249,15 @@ var ChatBot = function () {
             patterns = settings.patterns;
             addChatEntryCallback = settings.addChatEntryCallback;
 
-            // update the command description
+            //Update the command description
             updateCommandDescription();
 
-            // input capability listing?
+            //Input capability listing
             if (inputCapabilityListing) {
                 $(inputs).attr("list", "chatBotCommands");
             }
 
-            // listen to inputs on the defined fields
+            //Listen to inputs on the defined fields
             $(inputs).keyup(function (e) {
                 if (e.keyCode == 13) {
                     ChatBot.addChatEntry($(this).val(), "human");
@@ -393,7 +279,7 @@ var ChatBot = function () {
                 return;
             }
             if (text == '') {
-                text = 'Sorry, I have no idea.';
+                text = 'Damn, I dunno about that. 🙇';
             }
             var entryDiv = $('<div class="chatBotChatEntry ' + origin + '"></div>');
             entryDiv.html('<span class="origin">' + (origin == 'bot' ? botName : humanName) + '</span>' + text);
@@ -421,10 +307,10 @@ var ChatBot = function () {
         react: function react(text) {
             this.thinking(true);
 
-            // check for custom patterns
+            //Check for custom patterns
             for (var i = 0; i < patterns.length; i++) {
                 var pattern = patterns[i];
-                var r = new RegExp(pattern.regexp, "i");
+                var r = new RegExp(pattern.regexp, "i"); //Execute a search on a string "i"
                 var matches = text.match(r);
                 //console.log(matches);
                 if (matches) {
@@ -440,7 +326,7 @@ var ChatBot = function () {
                             }
                             break;
                         case 'response':
-//                                var response = text.replace(r, pattern.actionValue);
+                            // var response = text.replace(r, pattern.actionValue);
                             var response = pattern.actionValue;
                             if (response != undefined) {
                                 for (var j = 1; j < matches.length; j++) {

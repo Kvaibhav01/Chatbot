@@ -56,8 +56,10 @@
 <script src="../js/chatbot.js"></script>
 <link rel="stylesheet" type="text/css" href="../css/chatbot.css" />
 <div class="jumbotron text-center">
-  <h1>ChatBot</h1>
+  <h1>🤖</h1>
+  <h1><code>ChatBot</code></h1>
   <h3>Welcome to Chatbot powered by <a href="https://duckduckgo.com/" target="_blank">DuckDuckGo</a></h3>
+  <h4><small><b>{</b>Made with ❤️ using HTML, CSS and JavaScript<b>}</b></small></h4>
 </div>
 
 <div id="demo">
@@ -99,8 +101,8 @@
         "Hi",
         "My name is Vaibhav",
         "Where is Barbados?",
-        "What is the population of Barbados?", //China
-        "Goodbye!" //Bye
+        "What is the population of China?", //China
+        "Bye" //Bye
         ];
 
     //Initialize the bot
@@ -119,7 +121,7 @@
     /*Specific patterns as shown while clicking 'What can I say?' button.
     Parameter: the pattern to listen, respond/rewrite request, response/rewrite value, function to match pattern, Value of what a user can say */
     ChatBot.addPattern("^hi$", "response", "Howdy, friend!", undefined, "Say 'Hi' to greet back.");
-    ChatBot.addPattern("^bye$", "response", "See you later buddy", undefined, "Say 'Bye' to end the conversation.");
+    ChatBot.addPattern("^bye$", "response", "See you later friend!", undefined, "Say 'Bye' to end the conversation.");
     ChatBot.addPattern("(?:my name is|I'm|I am) (.*)", "response", "hi $1, thanks for talking to me today", function (matches) {
         ChatBot.setHumanName(matches[1]);
     },"Say 'My name is [your name]' or 'I am [name]' so that the bot knows your name.");
