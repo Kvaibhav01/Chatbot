@@ -157,8 +157,8 @@ var ChatBot = function () {
                     "Ask what something is like 'What is DNA'?",
                     "Ask where something is like 'Where is Barbados'?",
                     "Ask about a person like 'Who is Elon Musk'?",
-                    "Say a movie/person/location name like 'Avengers Infinity War' to get information about it",
-                    "Say a something like 'simpsons characters' to get information about that phrase",
+                    "Say a movie/person/location name like 'Avengers Infinity War' to get information about it.",
+                    "Say a something like 'simpsons characters' to get information about that phrase.",
                 ];
                 
                 // Fetch data
